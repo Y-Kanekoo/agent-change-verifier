@@ -23,7 +23,7 @@ jobs:
   api:
     kind: api
     stage: api
-    run: "uv run --locked pytest tests/api"
+    run: "uv run --locked pytest tests/api --no-cov"
   e2e:
     kind: e2e
     stage: e2e
