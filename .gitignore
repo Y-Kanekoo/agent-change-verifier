@@ -12,3 +12,7 @@ htmlcov/
 node_modules/
 .env
 .DS_Store
+.uv-cache/
+.uv-python/
+.tmp/
+.acv-command-*/

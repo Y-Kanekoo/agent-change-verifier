@@ -1,0 +1,37 @@
+[[criteria]]
+id = "readme"
+description = "README が存在する"
+kind = "file_exists"
+path = "README.md"
+
+[[criteria]]
+id = "usage"
+description = "README に使用方法がある"
+kind = "file_contains"
+path = "README.md"
+pattern = "acv check"
+
+[[criteria]]
+id = "implementation"
+description = "実装ファイルが変更されている"
+kind = "diff_touches"
+pattern = "src/*"
+
+[[criteria]]
+id = "license"
+description = "ライセンスを変更しない"
+kind = "diff_not_touches"
+pattern = "LICENSE"
+
+[[criteria]]
+id = "tests"
+description = "実装変更にテスト変更を伴う"
+kind = "test_added_for"
+path = "src/*"
+
+[[criteria]]
+id = "syntax"
+description = "Python の構文を検証する"
+kind = "command"
+command = ["python", "-m", "compileall", "-q", "src"]
+timeout = 30
