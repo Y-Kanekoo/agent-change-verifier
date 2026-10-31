@@ -1,5 +1,9 @@
 # 変更履歴
 
+## 未リリース
+
+- テストの移動・改名を Git の rename 検出で追跡し、TEST_FILE_DELETED などを誤って報告しないようにした。JSON 出力に `renamed_files` を追加。
+
 ## 0.1.0
 
 - Git 参照間・作業ツリー差分を検証する `acv` / `agent-change-verifier` を追加。

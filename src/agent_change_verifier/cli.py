@@ -58,6 +58,7 @@ def main(argv: list[str] | None = None) -> int:
         "passed": not failed,
         "fail_on": args.fail_on,
         "changed_files": [change.path for change in comparison.changes],
+        "renamed_files": [{"from": old, "to": new} for old, new in comparison.renames],
         "findings": [asdict(finding) for finding in findings],
         "criteria": [asdict(result) for result in results],
         "commands_not_run": sum(result.status == "not_run" for result in results),
@@ -66,6 +67,8 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(payload, ensure_ascii=False, indent=2))
     else:
         print(f"判定: {'不合格' if failed else '合格'}（変更 {len(comparison.changes)} ファイル）")
+        for old, new in comparison.renames:
+            print(f"移動: {old} → {new}（移動前の内容と比べて検査）")
         for finding in findings:
             print(
                 f"[{finding.severity}] {finding.rule_id} {finding.file}:{finding.line} {finding.message}"

@@ -84,10 +84,21 @@ def inspect(changes: list[Change]) -> list[Finding]:
         ) -> None:
             findings.append(Finding(rule, severity, path, line, message, evidence))
 
+        if change.renamed_to is not None and not (
+            is_test(change.path) and not is_test(change.renamed_to)
+        ):
+            # 移動元は、移動先の Change で移動前の内容と比べて検査する。
+            # テストがテストとして検出されないパスへ移った場合だけ、削除として扱う。
+            continue
         is_source = PurePosixPath(change.path).suffix in TEST_PATTERNS
         test = is_test(change.path)
         if test and change.deleted:
-            emit("TEST_FILE_DELETED", 1, "テストファイルが削除されました。", "削除前のファイル全体")
+            evidence = (
+                f"{change.renamed_to} へ移動（テストとして検出されないパス）"
+                if change.renamed_to is not None
+                else "削除前のファイル全体"
+            )
+            emit("TEST_FILE_DELETED", 1, "テストファイルが削除されました。", evidence)
         if test:
             pattern = TEST_PATTERNS[PurePosixPath(change.path).suffix]
             for rule, expression, message in (
